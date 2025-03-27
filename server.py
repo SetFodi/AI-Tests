@@ -15,14 +15,14 @@ def run_model():
     model_map = {
         'claude haiku': 'claudehaiku.py',
         'deepseek r1': 'deepSeekR1_Llama.py',
-        'claude (reasoning model)': 'claudeopus.py',
+        'claude (reasoning model)': 'claudethink.py',
         'gemini 2.5 pro': 'gemini2.5.py',
         'grok thinking model': 'grokthink.py',
         'o3 mini high': 'o3minihigh.py',
         'claude opus': 'claudeopus.py',
         'deepseek v3': 'DeepSeekv3.py',
         'grok 3': 'grok.py',
-        'chatgpt default free model': 'chatgpt4mini.py',
+        'chatgpt default free model': 'chatgpt4omini.py',
         'gemini 2.0 flash': 'geminiflash.py'
     }
     
@@ -60,4 +60,3 @@ def run_model():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
-

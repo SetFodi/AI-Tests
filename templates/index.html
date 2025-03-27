@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comprehensive AI Test Suite</title>
+    <!-- Modern Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset & Base Styles */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --primary: #6366f1;
+        --primary-light: #818cf8;
+        --primary-dark: #4f46e5;
+        --secondary: #10b981;
+        --secondary-dark: #047857;
+        --danger: #ef4444;
+        --danger-light: #fecaca;
+        --danger-dark: #b91c1c;
+        --neutral-50: #fafafa;
+        --neutral-100: #f5f5f5;
+        --neutral-200: #e5e5e5;
+        --neutral-300: #d4d4d4;
+        --neutral-400: #a3a3a3;
+        --neutral-500: #737373;
+        --neutral-600: #525252;
+        --neutral-700: #404040;
+        --neutral-800: #262626;
+        --neutral-900: #171717;
+        --bg-gradient: linear-gradient(135deg, #4f46e5, #10b981);
+        --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        --item-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        --border-radius-sm: 0.375rem;
+        --border-radius-md: 0.5rem;
+        --border-radius-lg: 0.75rem;
+        --border-radius-full: 9999px;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--bg-gradient);
+        color: var(--neutral-800);
+        padding: 20px;
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+/* Add this to your existing CSS styles */
+
+/* Preview button */
+.preview-btn {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+}
+
+.preview-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(37, 99, 235, 0.35);
+}
+
+.preview-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--neutral-50);
+  border-radius: var(--border-radius-lg);
+  padding: 25px;
+  max-width: 90%;
+  width: 850px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--neutral-500);
+  transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+  color: var(--danger);
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.canvas-container {
+  width: 100%;
+  height: 400px;
+  background: black;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+}
+
+canvas {
+  display: block;
+}
+
+.simulation-info {
+  margin-top: 15px;
+  padding: 15px;
+  background: var(--neutral-100);
+  border-radius: var(--border-radius-md);
+  font-size: 0.9rem;
+}
+
+.simulation-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.control-btn {
+  padding: 8px 15px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.control-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+      .container {
+        max-width: 950px;
+        background: var(--neutral-50);
+        margin: 30px auto;
+        padding: 30px 40px;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        position: relative;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        z-index: 1;
+      }
+
+      .container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 15px -6px rgba(0, 0, 0, 0.1);
+      }
+
+      h1.main-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 700;
+        font-size: 2.5em;
+        color: var(--neutral-800);
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      h1.main-title::after {
+        content: "";
+        position: absolute;
+        width: 60%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        bottom: 0;
+        left: 20%;
+        border-radius: var(--border-radius-full);
+      }
+
+      /* Test Category Tabs */
+      .test-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 25px;
+        border-bottom: 2px solid var(--neutral-200);
+        padding-bottom: 15px;
+        position: relative;
+      }
+
+      .test-tabs::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transition: width var(--transition-medium);
+      }
+
+      .test-tabs:hover::after {
+        width: 100%;
+      }
+
+      .tab {
+        padding: 12px 22px;
+        background-color: var(--neutral-100);
+        color: var(--neutral-600);
+        border: none;
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: all var(--transition-medium);
+        font-size: 1rem;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-light), var(--primary));
+        opacity: 0;
+        transition: opacity var(--transition-medium);
+        z-index: -1;
+      }
+
+      .tab:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab:hover::before {
+        opacity: 1;
+      }
+
+      .tab.active {
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        color: white;
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        transform: translateY(-2px);
+      }
+
+      .tab.active:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 10px rgba(79, 70, 229, 0.4);
+      }
+
+      .add-tab-btn {
+        padding: 12px 22px;
+        background: linear-gradient(90deg, var(--secondary), var(--secondary-dark));
+        color: white;
+        border: none;
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: all var(--transition-medium);
+        font-size: 1rem;
+        font-weight: 500;
+        margin-left: auto;
+        box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .add-tab-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.8s ease;
+      }
+
+      .add-tab-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 6px 10px rgba(16, 185, 129, 0.35);
+      }
+
+      .add-tab-btn:hover::before {
+        left: 100%;
+      }
+
+      /* Active Test Content Area */
+      #active-test-content {
+        animation: fadeIn var(--transition-medium) ease forwards;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      h2.current-test-title {
+        margin-bottom: 20px;
+        font-weight: 600;
+        font-size: 1.7em;
+        color: var(--neutral-800);
+        padding-left: 15px;
+        border-left: 4px solid var(--primary);
+        transition: all var(--transition-medium);
+        position: relative;
+      }
+
+      h2.current-test-title::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), transparent);
+        transition: width var(--transition-medium);
+      }
+
+      h2.current-test-title:hover::after {
+        width: 100%;
+      }
+
+      form#add-model-form {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      form#add-model-form input[type="text"] {
+        flex: 1;
+        padding: 14px 16px;
+        border: 2px solid var(--neutral-200);
+        border-radius: var(--border-radius-md);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all var(--transition-medium);
+        background-color: var(--neutral-50);
+      }
+
+      form#add-model-form input[type="text"]:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        background-color: white;
+      }
+
+      form#add-model-form input[type="text"]::placeholder {
+        color: var(--neutral-400);
+        transition: color var(--transition-medium);
+      }
+
+      form#add-model-form input[type="text"]:focus::placeholder {
+        color: var(--neutral-300);
+      }
+
+      form#add-model-form button {
+        padding: 12px 24px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        color: white;
+        border: none;
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: all var(--transition-medium);
+        font-size: 1rem;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(99, 102, 241, 0.25);
+        position: relative;
+        overflow: hidden;
+      }
+
+      form#add-model-form button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.8s ease;
+      }
+
+      form#add-model-form button:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 6px 10px rgba(99, 102, 241, 0.35);
+      }
+
+      form#add-model-form button:hover::before {
+        left: 100%;
+      }
+
+      form#add-model-form button:active {
+        transform: translateY(1px);
+      }
+
+      /* Model List Styles */
+      ul#model-list {
+        list-style: none;
+        min-height: 120px;
+        position: relative;
+      }
+
+      /* Placeholder for drop target */
+      .drop-placeholder {
+        height: 0;
+        border-top: 2px dashed var(--primary-light);
+        margin: 0;
+        opacity: 0;
+        transition: all 0.2s ease;
+      }
+
+      .drop-placeholder.active {
+        height: 20px;
+        opacity: 1;
+        margin: 10px 0;
+        background-color: rgba(99, 102, 241, 0.05);
+        border-radius: var(--border-radius-sm);
+      }
+
+      ul#model-list li {
+        background-color: white;
+        margin-bottom: 15px;
+        padding: 18px 24px;
+        border: 1px solid var(--neutral-200);
+        border-radius: var(--border-radius-md);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: all var(--transition-medium);
+        animation: fadeInUp 0.5s ease forwards;
+        box-shadow: var(--item-shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      ul#model-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: linear-gradient(180deg, var(--primary), var(--primary-light));
+        transform: scaleY(0);
+        transform-origin: bottom;
+        transition: transform var(--transition-medium);
+      }
+
+      ul#model-list li:hover {
+        background-color: var(--neutral-50);
+        transform: translateY(-5px) translateX(2px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        border-color: var(--neutral-300);
+      }
+
+      ul#model-list li:hover::before {
+        transform: scaleY(1);
+      }
+
+      ul#model-list li.dragging {
+        opacity: 0.8;
+        background-color: var(--neutral-100);
+        border: 2px dashed var(--primary-light);
+        transform: scale(1.02) rotate(1deg);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        cursor: grabbing;
+      }
+
+      /* New drag handle style */
+      .model-drag-handle {
+        background-color: var(--neutral-100);
+        border-radius: var(--border-radius-sm);
+        padding: 8px 6px;
+        cursor: grab;
+        color: var(--neutral-500);
+        font-size: 1.2rem;
+        transition: all var(--transition-medium);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .model-drag-handle:hover {
+        background-color: var(--primary-light);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .model-drag-handle:active {
+        cursor: grabbing;
+      }
+
+      /* On drag, visually hint dragability */
+      li.drag-over .model-drag-handle {
+        background-color: var(--primary-light);
+        color: white;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+
+      .flex-grow {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+      }
+
+      .model-name {
+        font-size: 1.15rem;
+        font-weight: 500;
+        word-break: break-word;
+        min-width: 150px;
+        flex-shrink: 0;
+        transition: all var(--transition-medium);
+        position: relative;
+        padding: 5px 0;
+        color: var(--neutral-700);
+      }
+
+      .model-name::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), transparent);
+        transition: width var(--transition-medium);
+      }
+
+      li:hover .model-name {
+        color: var(--neutral-900);
+      }
+
+      li:hover .model-name::after {
+        width: 100%;
+      }
+
+      .stars {
+        display: flex;
+        gap: 5px;
+        cursor: pointer;
+        user-select: none;
+        transition: transform var(--transition-medium);
+        flex-wrap: nowrap;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .stars::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #fbbf24, transparent);
+        transition: width var(--transition-medium);
+      }
+
+      li:hover .stars::after {
+        width: 100%;
+      }
+
+      .stars span {
+        font-size: 1.4rem;
+        transition: all var(--transition-medium);
+        color: #fbbf24;
+        text-shadow: 0 2px 4px rgba(251, 191, 36, 0.2);
+        transform-origin: center;
+      }
+
+      .stars span.empty {
+        color: var(--neutral-300);
+        text-shadow: none;
+      }
+
+      .stars:hover span {
+        transform: scale(1.1);
+      }
+
+      .stars span:hover {
+        transform: scale(1.4);
+        color: #f59e0b;
+      }
+
+      .stars span:hover ~ span {
+        color: var(--neutral-300);
+      }
+
+      .stars span.empty:hover {
+        color: #f59e0b;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-left: auto;
+      }
+
+      .btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 8px 14px;
+        font-size: 0.95rem;
+        border-radius: var(--border-radius-md);
+        transition: all var(--transition-medium);
+        color: var(--primary);
+        font-weight: 500;
+        font-family: inherit;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(99, 102, 241, 0.1);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform var(--transition-medium);
+        z-index: -1;
+        border-radius: var(--border-radius-md);
+      }
+
+      .btn:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
+      .btn.edit-btn:hover {
+        color: var(--primary-dark);
+      }
+
+      .btn.delete-btn {
+        color: var(--danger);
+      }
+
+      .btn.delete-btn::before {
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      .btn.delete-btn:hover {
+        color: var(--danger-dark);
+      }
+
+      .btn:active {
+        transform: translateY(2px);
+      }
+
+      .edit-input {
+        font-size: 1.15rem;
+        padding: 8px 12px;
+        border: 2px solid var(--primary-light);
+        border-radius: var(--border-radius-sm);
+        width: auto;
+        min-width: 150px;
+        flex-grow: 1;
+        font-family: inherit;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        transition: all var(--transition-medium);
+      }
+
+      .edit-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+      }
+
+      /* Empty state styling */
+      .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: var(--neutral-500);
+        background: var(--neutral-50);
+        border-radius: var(--border-radius-lg);
+        border: 2px dashed var(--neutral-300);
+        transition: all var(--transition-medium);
+      }
+
+      .empty-state:hover {
+        border-color: var(--primary-light);
+        background: white;
+        transform: translateY(-2px);
+      }
+
+      .empty-state-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: var(--neutral-400);
+      }
+
+      .empty-state-text {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+      }
+
+      .empty-state-subtext {
+        font-size: 0.9rem;
+        color: var(--neutral-500);
+      }
+
+      /* Tooltip styles */
+      [data-tooltip] {
+        position: relative;
+      }
+
+      [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%) scale(0.8);
+        background: var(--neutral-800);
+        color: white;
+        padding: 5px 10px;
+        border-radius: var(--border-radius-sm);
+        font-size: 0.75rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-medium);
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      [data-tooltip]:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) scale(1);
+      }
+
+      /* Up/Down Arrows for reordering */
+      .move-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .move-btn {
+        background-color: var(--neutral-100);
+        border: none;
+        border-radius: var(--border-radius-sm);
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        color: var(--neutral-600);
+      }
+
+      .move-btn:hover {
+        background-color: var(--primary-light);
+        color: white;
+      }
+
+      .move-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        background-color: var(--neutral-100);
+        color: var(--neutral-400);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px 25px;
+          margin: 15px auto;
+        }
+
+        h1.main-title {
+          font-size: 1.8em;
+        }
+
+        .flex-grow {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+
+        .tab, .add-tab-btn {
+          padding: 10px 16px;
+          font-size: 0.9rem;
+        }
+      }
+
+      /* Added animation for drag handle icon */
+      @keyframes wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(3deg); }
+        75% { transform: rotate(-3deg); }
+      }
+
+      li:hover .model-drag-handle {
+        animation: wiggle 1s ease infinite;
+      }
+
+      /* Additional sparkle animations */
+      @keyframes sparkle {
+        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+        50% { transform: scale(1) rotate(180deg); opacity: 1; }
+        100% { transform: scale(0) rotate(360deg); opacity: 0; }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .sparkle::before, .sparkle::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-light);
+        opacity: 0.7;
+        animation: sparkle 0.8s ease forwards;
+        border-radius: 2px;
+      }
+
+      .sparkle::after {
+        transform: rotate(45deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="main-title">AI Test Suite & Ranking</h1>
+
+      <!-- Test Category Tabs -->
+      <div class="test-tabs" id="test-tabs">
+        <!-- Tabs will be generated here -->
+        <button class="add-tab-btn" id="add-test-category-btn" data-tooltip="Add new test category">
+          + Add Test Type
+        </button>
+      </div>
+
+      <!-- Content for the Active Test -->
+      <div id="active-test-content">
+        <h2 class="current-test-title" id="current-test-title">
+          Select a Test Type
+        </h2>
+
+        <form id="add-model-form" style="display: none">
+          <!-- Hidden initially -->
+          <input
+            type="text"
+            id="new-model-name"
+            placeholder="Enter AI Model name"
+            required
+          />
+          <button type="submit" data-tooltip="Add to model list">Add Model</button>
+        </form>
+
+        <ul id="model-list">
+          <!-- Model list for the active test will be generated here -->
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // Data key for localStorage
+      const STORAGE_KEY = "aiTestSuiteData";
+    
+      // Global object to hold all test data { "testName": [models], ... }
+      let allTestsData = {};
+      let currentTestKey = null; // Key of the currently active test category
+    
+      // Initialize our app
+      function init() {
+        allTestsData = loadData();
+        renderTabs();
+        // Set the first test as active if available, otherwise show placeholder
+        const testKeys = Object.keys(allTestsData);
+        if (testKeys.length > 0) {
+          setActiveTest(testKeys[0]);
+        } else {
+          showPlaceholder();
+        }
+    
+        document
+          .getElementById("add-test-category-btn")
+          .addEventListener("click", handleAddTestCategory);
+        document
+          .getElementById("add-model-form")
+          .addEventListener("submit", handleAddModel);
+        
+        // Add sparkle effect for clicks
+        document.addEventListener("click", createSparkle);
+      }
+    
+      // Create sparkle effect
+      function createSparkle(e) {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.style.left = `${e.pageX - 10}px`;
+        sparkle.style.top = `${e.pageY - 10}px`;
+        document.body.appendChild(sparkle);
+    
+        // Remove sparkle after animation completes
+        setTimeout(() => {
+          sparkle.remove();
+        }, 800);
+      }
+    
+      // Load the data from local storage or use default structure
+      function loadData() {
+        const localData = localStorage.getItem(STORAGE_KEY);
+        if (localData) {
+          try {
+            const parsedData = JSON.parse(localData);
+            // Basic validation: ensure it's an object
+            if (typeof parsedData === "object" && parsedData !== null) {
+              return parsedData;
+            }
+            console.warn("Stored data is not an object, initializing default.");
+          } catch (e) {
+            console.error("Error parsing stored data, using defaults.", e);
+          }
+        }
+        // Default structure with one example test if empty
+        return {
+          "Hexagon Tests": [
+            {
+              id: generateId(),
+              name: "Claude (Reasoning Model)",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Gemini 2.5 Pro",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "O3 mini high",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Grok thinking Model",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "DeepSeek R1 LLAMA",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Claude Opus/DeepSeek v3",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Claude Haiku/DeepSeek R1",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Grok 3",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Chatgpt default free model (4o mini)",
+              rating: 0,
+            },
+            {
+              id: generateId(),
+              name: "Gemini 2.0 Flash",
+              rating: 0,
+            },
+          ],
+        };
+      }
+    
+      // Save the current tests object to LocalStorage
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allTestsData));
+      }
+    
+      // Generate a simple unique id
+      function generateId() {
+        return (
+          Date.now().toString(36) +
+          Math.random().toString(36).substr(2, 9)
+        );
+      }
+    
+      // Render the test category tabs
+      function renderTabs() {
+        const tabsContainer = document.getElementById("test-tabs");
+        // Clear existing tabs except the add button
+        tabsContainer.querySelectorAll(".tab").forEach((tab) => tab.remove());
+    
+        const addBtn = document.getElementById("add-test-category-btn");
+    
+        Object.keys(allTestsData).forEach((testKey) => {
+          const tab = document.createElement("button");
+          tab.className = "tab";
+          tab.textContent = testKey;
+          tab.dataset.testKey = testKey;
+          tab.dataset.tooltip = `${allTestsData[testKey].length} models`;
+          if (testKey === currentTestKey) {
+            tab.classList.add("active");
+          }
+          tab.addEventListener("click", () => setActiveTest(testKey));
+          // Insert before the add button
+          tabsContainer.insertBefore(tab, addBtn);
+        });
+      }
+    
+      // Handle adding a new test category
+      function handleAddTestCategory() {
+        const newTestName = prompt("Enter the name for the new test type:");
+        if (newTestName && newTestName.trim()) {
+          const trimmedName = newTestName.trim();
+          if (!allTestsData.hasOwnProperty(trimmedName)) {
+            allTestsData[trimmedName] = []; // Initialize with empty model list
+            saveData();
+            renderTabs();
+            setActiveTest(trimmedName); // Switch to the new test
+          } else {
+            alert("A test type with this name already exists.");
+          }
+        }
+      }
+    
+      // Set the currently active test category
+      function setActiveTest(testKey) {
+        if (!allTestsData.hasOwnProperty(testKey)) {
+          console.error("Attempted to set non-existent test key:", testKey);
+          // Optionally fall back to the first available test or show placeholder
+          const keys = Object.keys(allTestsData);
+          if (keys.length > 0) {
+            testKey = keys[0];
+          } else {
+            showPlaceholder();
+            return;
+          }
+        }
+    
+        currentTestKey = testKey;
+        document.getElementById("current-test-title").textContent = currentTestKey;
+        document.getElementById("add-model-form").style.display = "flex"; // Show form
+        renderTabs(); // Update active tab style
+        renderModelList();
+      }
+    
+      // Show placeholder when no tests exist or none selected
+      function showPlaceholder() {
+        currentTestKey = null;
+        document.getElementById("current-test-title").textContent =
+          "Add or Select a Test Type";
+        document.getElementById("add-model-form").style.display = "none";
+    
+        // Create a more attractive empty state
+        const modelList = document.getElementById("model-list");
+        modelList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <div class="empty-state-text">No test categories found</div>
+            <div class="empty-state-subtext">Click '+ Add Test Type' to create your first test</div>
+          </div>
+        `;
+        
+        renderTabs(); // Ensure tabs are rendered correctly even if empty
+      }
+    
+      // Handle adding a new model to the current test
+      function handleAddModel(e) {
+        e.preventDefault();
+        if (!currentTestKey) return; // Don't add if no test is selected
+    
+        const input = document.getElementById("new-model-name");
+        const name = input.value.trim();
+        if (name) {
+          const newModel = {
+            id: generateId(),
+            name: name,
+            rating: 0,
+          };
+          allTestsData[currentTestKey].push(newModel);
+          saveData();
+          renderModelList(); // Re-render list for the current test
+          input.value = "";
+          
+          // Add gentle focus animation
+          input.style.animation = "pulseGlow 0.8s ease";
+          setTimeout(() => {
+            input.style.animation = "";
+          }, 800);
+        }
+      }
+    
+      // Render the model list for the currently active test
+      function renderModelList() {
+        if (!currentTestKey || !allTestsData[currentTestKey]) {
+          document.getElementById("model-list").innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🤖</div>
+              <div class="empty-state-text">No models added yet</div>
+              <div class="empty-state-subtext">Add your first AI model above</div>
+            </div>
+          `;
+          return;
+        }
+    
+        const listContainer = document.getElementById("model-list");
+        listContainer.innerHTML = ""; // Clear previous list items
+    
+        const models = allTestsData[currentTestKey];
+    
+        if (models.length === 0) {
+          listContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🤖</div>
+              <div class="empty-state-text">No models added yet</div>
+              <div class="empty-state-subtext">Add your first AI model above</div>
+            </div>
+          `;
+          return;
+        }
+    
+        // Add a placeholder for the first position
+        const topPlaceholder = document.createElement("div");
+        topPlaceholder.className = "drop-placeholder";
+        topPlaceholder.dataset.position = "0";
+        listContainer.appendChild(topPlaceholder);
+    
+        models.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.setAttribute("draggable", "true");
+          li.dataset.id = item.id;
+          li.dataset.index = index;
+    
+          // Add move up/down buttons instead of drag
+          const moveButtons = document.createElement("div");
+          moveButtons.className = "move-buttons";
+          
+          const moveUpBtn = document.createElement("button");
+          moveUpBtn.innerHTML = "▲";
+          moveUpBtn.className = "move-btn";
+          moveUpBtn.setAttribute("data-tooltip", "Move up");
+          moveUpBtn.disabled = index === 0;
+          moveUpBtn.addEventListener("click", () => moveItem(index, "up"));
+          
+          const moveDownBtn = document.createElement("button");
+          moveDownBtn.innerHTML = "▼";
+          moveDownBtn.className = "move-btn";
+          moveDownBtn.setAttribute("data-tooltip", "Move down");
+          moveDownBtn.disabled = index === models.length - 1;
+          moveDownBtn.addEventListener("click", () => moveItem(index, "down"));
+          
+          moveButtons.appendChild(moveUpBtn);
+          moveButtons.appendChild(moveDownBtn);
+          li.appendChild(moveButtons);
+    
+          // Container for name and stars
+          const flexDiv = document.createElement("div");
+          flexDiv.className = "flex-grow";
+    
+          // Model name span (or input in edit mode)
+          const nameSpan = document.createElement("span");
+          nameSpan.className = "model-name";
+          nameSpan.textContent = item.name;
+          flexDiv.appendChild(nameSpan);
+    
+          // Stars rating spans (10 stars)
+          const starsDiv = document.createElement("div");
+          starsDiv.className = "stars";
+          starsDiv.setAttribute("data-tooltip", "Rate performance");
+          
+          for (let i = 1; i <= 10; i++) {
+            const star = document.createElement("span");
+            star.textContent = "★"; // Always use filled star initially
+            star.dataset.value = i;
+            if (i > item.rating) {
+              star.classList.add("empty"); // Add class for styling empty stars
+            }
+            star.addEventListener("click", () =>
+              updateRating(item.id, i)
+            );
+            starsDiv.appendChild(star);
+          }
+          flexDiv.appendChild(starsDiv);
+          li.appendChild(flexDiv);
+    
+          // Edit and Delete buttons container
+          const btnContainer = document.createElement("div");
+          btnContainer.className = "button-group";
+          
+          // Preview button - new addition
+          const previewBtn = document.createElement("button");
+          previewBtn.className = "preview-btn";
+          previewBtn.setAttribute("data-tooltip", "Run Python simulation");
+          previewBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="2"></circle>
+              <path d="M22 12c-2.67 4-6 6-10 6s-7.33-2-10-6c2.67-4 6-6 10-6s7.33 2 10 6z"></path>
+            </svg>
+            Preview
+          `;
+          previewBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPreview(item.id, item.name);
+          });
+    
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "Edit";
+          editBtn.className = "btn edit-btn";
+          editBtn.setAttribute("data-tooltip", "Edit model name");
+          editBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            handleEdit(item.id, nameSpan);
+          });
+    
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Delete";
+          deleteBtn.className = "btn delete-btn";
+          deleteBtn.setAttribute("data-tooltip", "Remove model");
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteModel(item.id);
+          });
+    
+          btnContainer.appendChild(previewBtn); // Add the preview button
+          btnContainer.appendChild(editBtn);
+          btnContainer.appendChild(deleteBtn);
+          li.appendChild(btnContainer);
+    
+          // Add a slight animation delay based on index
+          li.style.animationDelay = `${index * 0.05}s`;
+          
+          listContainer.appendChild(li);
+          
+          // Add a placeholder after this item
+          const placeholder = document.createElement("div");
+          placeholder.className = "drop-placeholder";
+          placeholder.dataset.position = (index + 1).toString();
+          listContainer.appendChild(placeholder);
+        });
+      }
+    
+      // Move item up or down
+      function moveItem(index, direction) {
+        if (!currentTestKey) return;
+        
+        const models = allTestsData[currentTestKey];
+        
+        if (direction === "up" && index > 0) {
+          // Swap with the item above
+          [models[index], models[index - 1]] = [models[index - 1], models[index]];
+        } else if (direction === "down" && index < models.length - 1) {
+          // Swap with the item below
+          [models[index], models[index + 1]] = [models[index + 1], models[index]];
+        }
+        
+        saveData();
+        renderModelList();
+      }
+    
+      // Update the rating of a model in the current test
+      function updateRating(modelId, newRating) {
+        if (!currentTestKey) return;
+        const models = allTestsData[currentTestKey];
+        const index = models.findIndex((item) => item.id === modelId);
+        if (index > -1) {
+          // Toggle off if clicking the same rating again
+          models[index].rating =
+            models[index].rating === newRating ? 0 : newRating;
+          saveData();
+          renderModelList(); // Re-render to show updated stars
+        }
+      }
+    
+      // Handle editing a model name inline
+      function handleEdit(modelId, nameSpan) {
+        if (!currentTestKey) return;
+        const models = allTestsData[currentTestKey];
+        const index = models.findIndex((item) => item.id === modelId);
+        if (index === -1) return;
+    
+        const originalName = models[index].name;
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = originalName;
+        input.className = "edit-input";
+    
+        // Replace the span with the input field
+        nameSpan.replaceWith(input);
+        input.focus();
+        input.select(); // Select text for easy replacement
+    
+        function commitEdit() {
+          const newName = input.value.trim();
+          // Only update if name changed and is not empty
+          if (newName && newName !== originalName) {
+            models[index].name = newName;
+            saveData();
+          }
+          // Always re-render to switch back from input to span
+          renderModelList();
+        }
+    
+        input.addEventListener("blur", commitEdit);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            commitEdit();
+          } else if (e.key === "Escape") {
+            // Revert on Escape
+            input.replaceWith(nameSpan);
+          }
+        });
+      }
+    
+      // Delete a model from the current test list
+      function deleteModel(modelId) {
+        if (!currentTestKey) return;
+        const confirmDelete = confirm(
+          "Are you sure you want to delete this model entry?"
+        );
+        if (confirmDelete) {
+          allTestsData[currentTestKey] = allTestsData[currentTestKey].filter(
+            (item) => item.id !== modelId
+          );
+          saveData();
+          renderModelList();
+        }
+      }
+    
+      // Get the corresponding Python file for a model name
+      function getPythonFile(modelName) {
+        const modelNameLower = modelName.toLowerCase();
+        
+        // Direct mapping for known models
+        if (modelNameLower.includes("claude") && modelNameLower.includes("haiku")) {
+          return "claudehaiku.py";
+        } else if (modelNameLower.includes("claude") && modelNameLower.includes("opus")) {
+          return "claudeopus.py";
+        } else if (modelNameLower.includes("claude") && modelNameLower.includes("reasoning")) {
+          return "claudeopus.py";
+        } else if (modelNameLower.includes("deepseek") && modelNameLower.includes("r1")) {
+          return "deepSeekR1_Llama.py";
+        } else if (modelNameLower.includes("deepseek") && modelNameLower.includes("v3")) {
+          return "DeepSeekv3.py";
+        } else if (modelNameLower.includes("gemini") && modelNameLower.includes("2.5")) {
+          return "gemini2.5.py";
+        } else if (modelNameLower.includes("gemini") && modelNameLower.includes("flash")) {
+          return "geminiflash.py";
+        } else if (modelNameLower.includes("grok") && modelNameLower.includes("3")) {
+          return "grok.py";
+        } else if (modelNameLower.includes("grok") && modelNameLower.includes("thinking")) {
+          return "grokthink.py";
+        } else if (modelNameLower.includes("chatgpt") || modelNameLower.includes("4o mini")) {
+          return "chatgpt4mini.py";
+        } else if (modelNameLower.includes("o3 mini")) {
+          return "o3minihigh.py";
+        }
+        
+        // Fallback based on keywords
+        if (modelNameLower.includes("claude")) {
+          return "claudehaiku.py";
+        } else if (modelNameLower.includes("gemini")) {
+          return "gemini2.5.py";
+        } else if (modelNameLower.includes("grok")) {
+          return "grok.py";
+        } else if (modelNameLower.includes("deepseek")) {
+          return "deepseekr1.py";
+        } else if (modelNameLower.includes("chatgpt") || modelNameLower.includes("gpt")) {
+          return "chatgpt4mini.py";
+        } else if (modelNameLower.includes("o3")) {
+          return "o3minihigh.py";
+        }
+        
+        // Default fallback
+        return null;
+      }
+    
+      // Modal function updated to call the Flask server via fetch
+      function showPreview(modelId, modelName) {
+        const pythonFile = getPythonFile(modelName);
+    
+        if (!pythonFile) {
+          alert(`Could not determine Python file for model: ${modelName}`);
+          return;
+        }
+    
+        // Show the modal with a loading state
+        document.getElementById("modal-title").textContent =
+          `${modelName} - Launching Python Simulation`;
+        const modal = document.getElementById("preview-modal");
+        modal.classList.add("active");
+    
+        // Hide the canvas (or simulation area) and display a loading indication
+        const canvasContainer = document.querySelector(".canvas-container");
+        canvasContainer.innerHTML = `
+          <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; background-color: black;">
+            <div>
+              <div style="text-align: center; margin-bottom: 20px;">
+                <svg width="40" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none" />
+                  <path d="M12 6V12L16 14" stroke="white" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <p>Launching Python simulation for: ${modelName}</p>
+              <p>Using file: ${pythonFile}</p>
+            </div>
+          </div>
+        `;
+        document.getElementById("model-specific-info").textContent =
+          `Starting Python simulation using ${pythonFile}`;
+    
+        // POST request to our Flask server
+        fetch("http://127.0.0.1:5000/run-model", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ model_name: modelName }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              setTimeout(() => {
+                canvasContainer.innerHTML = `
+                  <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; background-color: black;">
+                    <div>
+                      <div style="text-align: center; margin-bottom: 20px; color: #4CAF50;">
+                        <svg width="60" height="60" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="10" stroke="#4CAF50" stroke-width="2" fill="none" />
+                          <path d="M8 12L10 14L16 8" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </div>
+                      <p>Python simulation started!</p>
+                      <p style="margin-top: 10px;">Running: <span style="background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 4px;">${pythonFile}</span></p>
+                    </div>
+                  </div>
+                `;
+                document.getElementById("model-specific-info").textContent = 
+                  `Python simulation started for ${modelName} using ${pythonFile}.`;
+              }, 500);
+            } else {
+              canvasContainer.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; background-color: black;">
+                  <div>
+                    <div style="text-align: center; margin-bottom: 20px; color: #F44336;">
+                      <svg width="60" height="60" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#F44336" stroke-width="2" fill="none" />
+                        <path d="M8 8L16 16M8 16L16 8" stroke="#F44336" stroke-width="2" stroke-linecap="round" />
+                      </svg>
+                    </div>
+                    <p>Failed to start Python simulation</p>
+                    <p>Please run it manually: <code>python3 ${pythonFile}</code></p>
+                  </div>
+                </div>
+              `;
+              document.getElementById("model-specific-info").textContent =
+                `Error: ${data.message}`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            canvasContainer.innerHTML = `
+              <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: white; background-color: black;">
+                <div>
+                  <div style="text-align: center; margin-bottom: 20px; color: #F44336;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="#F44336" stroke-width="2" fill="none" />
+                      <path d="M8 8L16 16M8 16L16 8" stroke="#F44336" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                  </div>
+                  <p>Error connecting to server</p>
+                  <p>Please ensure the server is running on http://127.0.0.1:5000</p>
+                </div>
+              </div>
+            `;
+            document.getElementById("model-specific-info").textContent =
+              "Error connecting to the server. Please check your server.";
+          });
+    
+        // Modal button event listeners
+        document
+          .getElementById("modal-close")
+          .addEventListener("click", closeModal);
+        document.getElementById("reset-simulation").textContent = "Close";
+        document
+          .getElementById("reset-simulation")
+          .addEventListener("click", closeModal);
+      }
+    
+      function closeModal() {
+        const modal = document.getElementById("preview-modal");
+        modal.classList.remove("active");
+      }
+    
+      // Close modal when clicking outside
+      window.addEventListener("click", (e) => {
+        const modal = document.getElementById("preview-modal");
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    
+      // Start the application
+      document.addEventListener("DOMContentLoaded", () => {
+        init();
+      });
+    </script>
+    
+    <!-- Modal template -->
+<div id="preview-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Model Preview</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="canvas-container">
+          <canvas id="simulation-canvas" width="800" height="400"></canvas>
+        </div>
+        <div class="simulation-controls">
+          <button class="control-btn" id="reset-simulation">Reset Simulation</button>
+        </div>
+        <div class="simulation-info">
+          <p>This visualization demonstrates the model's performance using a hexagon physics simulation.</p>
+          <p id="model-specific-info"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>
