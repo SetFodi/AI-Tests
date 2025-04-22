@@ -23,7 +23,8 @@ def run_model():
         'deepseek v3': 'DeepSeekv3.py',
         'grok 3': 'grok.py',
         'chatgpt default free model': 'chatgpt4omini.py',
-        'gemini 2.0 flash': 'geminiflash.py'
+        'gemini 2.0 flash': 'geminiflash.py',
+        'o4mini': 'o4mini.py'
     }
     
     python_file = None
