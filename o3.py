@@ -1,86 +1,84 @@
 import pygame
 import math
-import sys
 
 # Initialize Pygame
 pygame.init()
 
-# Screen dimensions
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Hexagon Bouncing Ball")
+# Set up display
+screen_width = 600
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Hexagon Ball Bouncing")
 
-# Colors
+# Define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-RED = (255, 0, 0)
+BALL_COLOR = (255, 0, 0)
 
-# Ball settings
-ball_radius = 10
-ball_x = WIDTH // 2
-ball_y = HEIGHT // 2
+# Ball properties
+ball_radius = 15
+ball_x = screen_width // 2
+ball_y = screen_height // 2
 ball_dx = 4
 ball_dy = 4
 
-# Hexagon settings
-hexagon_radius = 250
-center_x = WIDTH // 2
-center_y = HEIGHT // 2
-rotation_angle = 0
+# Hexagon properties
+hex_radius = 200
+center_x = screen_width // 2
+center_y = screen_height // 2
+angle = 0
 
-# Function to draw a rotated hexagon
+# Set up clock
+clock = pygame.time.Clock()
+
 def draw_hexagon(angle):
     points = []
     for i in range(6):
-        x = center_x + hexagon_radius * math.cos(math.radians(60 * i + angle))
-        y = center_y + hexagon_radius * math.sin(math.radians(60 * i + angle))
+        x = center_x + hex_radius * math.cos(math.radians(angle + i * 60))
+        y = center_y + hex_radius * math.sin(math.radians(angle + i * 60))
         points.append((x, y))
-    pygame.draw.polygon(screen, BLACK, points, 5)
+    pygame.draw.polygon(screen, WHITE, points, 3)
 
-# Function to check if the ball is within the hexagon
-def is_ball_inside_hexagon(x, y):
-    # Ball must be within the inscribed circle of the hexagon
-    distance_from_center = math.sqrt((x - center_x)**2 + (y - center_y)**2)
-    return distance_from_center <= hexagon_radius - ball_radius
+def check_collision():
+    global ball_dx, ball_dy
+    # Check collision with hexagon boundary
+    distance_from_center = math.sqrt((ball_x - center_x) ** 2 + (ball_y - center_y) ** 2)
+    if distance_from_center + ball_radius > hex_radius:
+        angle_to_ball = math.atan2(ball_y - center_y, ball_x - center_x)
+        ball_dx = -ball_dx * math.cos(angle_to_ball)
+        ball_dy = -ball_dy * math.sin(angle_to_ball)
 
-# Main game loop
-clock = pygame.time.Clock()
+# Game loop
+running = True
+while running:
+    screen.fill(BLACK)
 
-while True:
-    screen.fill(WHITE)
-    
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    
-    # Draw rotating hexagon
-    draw_hexagon(rotation_angle)
-    
+            running = False
+
+    # Update angle for hexagon rotation
+    angle += 1  # Change speed of rotation here
+
+    # Draw hexagon
+    draw_hexagon(angle)
+
     # Update ball position
     ball_x += ball_dx
     ball_y += ball_dy
-    
-    # Ball bouncing logic
-    if not is_ball_inside_hexagon(ball_x, ball_y):
-        # Reflect the ball's direction based on which side of the hexagon it hits
-        if ball_x < center_x - hexagon_radius or ball_x > center_x + hexagon_radius:
-            ball_dx = -ball_dx
-        if ball_y < center_y - hexagon_radius or ball_y > center_y + hexagon_radius:
-            ball_dy = -ball_dy
 
-    # Draw the ball
-    pygame.draw.circle(screen, RED, (ball_x, ball_y), ball_radius)
-    
-    # Rotate the hexagon angle
-    rotation_angle += 1
-    if rotation_angle >= 360:
-        rotation_angle = 0
-    
-    # Update the display
+    # Check for ball collision with hexagon boundary
+    check_collision()
+
+    # Draw ball
+    pygame.draw.circle(screen, BALL_COLOR, (int(ball_x), int(ball_y)), ball_radius)
+
+    # Update display
     pygame.display.flip()
-    
-    # Set the frame rate
+
+    # Control frame rate
     clock.tick(60)
+
+pygame.quit()
 
